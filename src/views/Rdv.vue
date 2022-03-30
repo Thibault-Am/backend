@@ -2,7 +2,7 @@
   <div class="Users">
     <b-navbar class="is-light">
       <template #brand>
-        <b-navbar-item>
+        <b-navbar-item tag="router-link" :to="{ path: '/home' }">
           <img
             src="https://etapes.com/app/uploads/2016/05/1464094938.png"
             alt="Atelier2"
@@ -32,17 +32,18 @@
         </b-navbar-item>
       </template>
     </b-navbar>
-    <div v-for="user in users" :key="user.id">
+
+    <div v-for="r in rdv" :key="r.id">
       <p>
-        {{ user.prenom }}
-        {{ user.nom }}
+        {{ r.libelle_event }}<br />
+        {{ r.libelle_lieu }}
+
+        <button
+          @click="deleteAncienRdv(r.id, r.libelle_event)"
+          class="delete is-medium is-vcentered suppButton"
+          id="DeleteRdv"
+        ></button>
       </p>
-      {{ user.mail }}
-      <button
-        @click="deleteUser(user.id, user.mail)"
-        class="delete is-medium is-vcentered suppButton"
-        id="DeleteUser"
-      ></button>
     </div>
   </div>
 </template>
@@ -53,7 +54,8 @@ export default {
   components: {},
   data() {
     return {
-      users: null,
+      date: null,
+      rdv: null,
       error: null,
     };
   },
@@ -63,54 +65,39 @@ export default {
       this.$router.push("/");
     },
 
-    chargementusers() {
+    chargementRdv() {
       axios
-        .get(`http://149.91.80.75:19380/users`)
-        .then((response) => (this.users = response.data));
+        .get(`http://149.91.80.75:19380/rdv`)
+        .then((response) => (this.rdv = response.data));
     },
-
-    AncienUsers() {
-      this.$store.state.token = null;
-      this.$router.push("/ancienusers");
-    },
-    deleteUser(id, label) {
+    deleteAncienRdv(id, label) {
       console.log("je suis la ");
       this.$buefy.dialog.confirm({
         type: "is-danger",
         cancelText: "Annuler",
         confirmText: "Accepter",
-        message: `Supprimer l'utilisateur avec le mail <strong>${label}</strong> ?`,
+        message: `Supprimer le rdv avec le libelle <strong>${label}</strong> ?`,
         onConfirm: () => {
           axios
-            .delete("http://149.91.80.75:19380/userSupp/" + id)
+            .delete("http://149.91.80.75:19380/rdvSupp/" + id)
             .then((response) => {
-              this.$buefy.toast.open("Utilisateur supprimée");
-              axios.get("http://149.91.80.75:19380/users").then((response) => {
-                this.users = response.data;
+              this.$buefy.toast.open("RDV supprimée");
+              axios.get("http://149.91.80.75:19380/rdv").then((response) => {
+                this.rdv = response.data;
               });
             });
         },
       });
     },
   },
-
   created() {
-    this.chargementusers();
+    this.chargementRdv();
   },
 };
 </script>
 
 <style lang="scss">
-.title {
-  color: #48c78e;
-}
-
 #AncienUsers {
   margin-top: 7px;
-}
-
-#DeleteUser {
-  margin-left: 70px;
-  margin-bottom: 20px;
 }
 </style>

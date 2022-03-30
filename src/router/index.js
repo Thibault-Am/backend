@@ -20,8 +20,8 @@ const routes = [
       return import(/* webpackChunkName: "about" */ '../views/Bienvenue.vue')
     }
   },
-{
-  path: '/ancienusers',
+  {
+    path: '/ancienusers',
     name: 'ancienusers',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -30,8 +30,29 @@ const routes = [
       return import(/* webpackChunkName: "about" */ '../views/AncienUsers.vue')
     }
 
-}
-  
+  },
+  {
+    path: '/rdvinactif',
+    name: 'rdvinactif',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/RdvInactif.vue')
+    }
+
+  },
+  {
+    path: '/rdv',
+    name: 'rdv',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Rdv.vue')
+    }
+
+  }
 
 ]
 
